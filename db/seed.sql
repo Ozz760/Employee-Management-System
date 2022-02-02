@@ -4,14 +4,16 @@ VALUES (1, "Engineering"),
        (3. "Sales"), 
        (4, "Finance");
 
-INSERT INTO role (id, title, salary, department)
-VALUES (1, "Engineer", 100000, 1)
-       (2, "Lawyer", 200000, 2)
-       (3, "Sales Person", 90000, 3)
-       (4, "Financer", 100000, 4);
+INSERT INTO role (id, title, salary, department_id)
+VALUES (6, "Engineer", 100000, 1),
+       (7, "Intern", 50000, 1)
+       (8, "Lawyer", 200000, 2),
+       (9, "Sales Person", 90000, 3),
+       (10, "Financer", 100000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)   
-VALUES ("Chris", "Lee", 2, 5)
-       ("Ann", "Carter", 1, 6)
-       ("David", "Smith", 3, 7)
-       ("Max", "Keegan", 4, 8);
+VALUES ("Chris", "Lee", 6, 11),
+       ("John", "Foo", 7, 11)
+       ("Ann", "Carter", 8, 12),
+       ("David", "Smith", 9, 13),
+       ("Max", "Keegan", 10, 14);
