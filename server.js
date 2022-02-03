@@ -57,7 +57,7 @@ const beginPrompt = () => {
 };
 
 const viewAllEmployees = () => {
-  db.query(`SELECT * FROM employees`, (err, res) => {
+  db.query(`SELECT * FROM employee`, (err, res) => {
     if (err) throw err;
     console.table(res);
     beginPrompt();
@@ -65,7 +65,7 @@ const viewAllEmployees = () => {
 };
 
 const viewRoles = () => {
-  db.query(`SELECT * FROM employees`, (err, res) => {
+  db.query(`SELECT * FROM role`, (err, res) => {
     if (err) throw err;
     console.table(res);
     beginPrompt();
@@ -73,7 +73,7 @@ const viewRoles = () => {
 };
 
 const viewAllDepartments = () => {
-  db.query(`SELECT * FROM employees`, (err, res) => {
+  db.query(`SELECT * FROM department`, (err, res) => {
     if (err) throw err;
     console.table(res);
     beginPrompt();
@@ -114,7 +114,7 @@ const addEmployee = () => {
     ])
     .then((answers) => {
       db.query(
-        `INSERT INTO employee(first_name, last_name, job_id, manager_id) values ('${answers.firstName}', '${answers.lastName}', '${answers.newJobId}', '${answers.newManId}')`
+        `INSERT INTO employee(first_name, last_name, job_id, manager_id) values ('${answers.firstName}', '${answers.lastName}', '${answers.newRoleId}', '${answers.newManId}')`
       );
       if (err) {
         throw err;
