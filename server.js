@@ -14,7 +14,7 @@ const beginPrompt = () => {
     .prompt({
       type: "list",
       name: "opener",
-      message: "What would yoy like to do?",
+      message: "What would you like to do?",
       choices: [
         "View all employees",
         "Add employees",
@@ -57,25 +57,34 @@ const beginPrompt = () => {
 };
 
 const viewAllEmployees = () => {
-  db.query(`SELECT * FROM employee`, (err, res) => {
-    if (err) throw err;
-    console.table(res);
+  db.query(`SELECT first_name, last_name FROM employee`, (err, res) => {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+    }
     beginPrompt();
   });
 };
 
 const viewRoles = () => {
-  db.query(`SELECT * FROM role`, (err, res) => {
-    if (err) throw err;
-    console.table(res);
+  db.query(`SELECT title FROM role`, (err, res) => {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+    }
     beginPrompt();
   });
 };
 
 const viewAllDepartments = () => {
   db.query(`SELECT * FROM department`, (err, res) => {
-    if (err) throw err;
-    console.table(res);
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+    }
     beginPrompt();
   });
 };
@@ -97,31 +106,25 @@ const addEmployee = () => {
         type: "input",
         name: "newRoleId",
         message: "Enter job ID",
-        validate: {
-          notNull: true,
-          isInt: true,
-        },
       },
       {
         type: "input",
         name: "newManId",
         message: "Enter manager ID",
-        validate: {
-          notNull: true,
-          isInt: true,
-        },
       },
     ])
     .then((answers) => {
       db.query(
         `INSERT INTO employee(first_name, last_name, job_id, manager_id) values ('${answers.firstName}', '${answers.lastName}', '${answers.newRoleId}', '${answers.newManId}')`
-      );
-      if (err) {
-        throw err;
-      } else {
-        console.table(res);
-      }
-      beginPrompt();
+      ),
+        (err, res) => {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+          }
+          beginPrompt();
+        };
     });
 };
 
@@ -137,31 +140,25 @@ const addRole = () => {
         type: "input",
         name: "newSalary",
         message: "Enter salary",
-        validate: {
-          notNull: true,
-          isInt: true,
-        },
       },
       {
         type: "input",
         name: "newDepId",
         message: "Enter Department ID",
-        validate: {
-          notNull: true,
-          isInt: true,
-        },
       },
     ])
     .then((answers) => {
       db.query(
         `INSERT INTO roles(title, salary, department_id) values ('${answers.newRole}', '${answers.newSalary}', '${answers.newDepId}')`
-      );
-      if (err) {
-        throw err;
-      } else {
-        console.table(res);
-      }
-      beginPrompt();
+      ),
+        (err, res) => {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+          }
+          beginPrompt();
+        };
     });
 };
 
@@ -177,22 +174,51 @@ const addDepartment = () => {
     .then((answers) => {
       db.query(
         `INSERT INTO department(name) values ('${answers.newDepartment}')`
-      );
-      if (err) {
-        throw err;
-      } else {
-        console.table(res);
-      }
-      beginPrompt();
+      ),
+        (err, res) => {
+          if (err) {
+            throw err;
+          } else {
+            console.table(res);
+          }
+          beginPrompt();
+        };
     });
 };
 
 const updateEmployeesRole = () => {
+  db.query("SELECT * from employee", (err, res) => {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+    }
+    inquirer
+      .prompt([
+        {
+          type: "input",
+          name: "employeeTarget",
+          message: "Enter employee ID to make changes",
+        },
+        {
+          type: "input",
+          name: "newJobId",
+          message: "Enter new job ID",
+        },
+      ])
+      .then((answers) => {
+        db.query(
+          `UPDATE employee SET job_id = ${answers.newJobId} WHERE id = ${answers.employeeTarget}`
+        ),
+          (err, res) => {
+            if (err) {
+              throw err;
+            } else {
+            }
+            beginPrompt();
+          };
+      });
+  });
+};
 
-}
-
-const quit = () => {
-
-}
-
-beginPrompt(); 
+beginPrompt();
