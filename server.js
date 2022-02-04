@@ -154,7 +154,7 @@ const addRole = () => {
     ])
     .then((answers) => {
       db.query(
-        `INSERT INTO job(title, salary, department_id) values ('${answers.newRole}', '${answers.newSalary}', '${answers.newDepId}')`
+        `INSERT INTO roles(title, salary, department_id) values ('${answers.newRole}', '${answers.newSalary}', '${answers.newDepId}')`
       );
       if (err) {
         throw err;
@@ -195,4 +195,4 @@ const quit = () => {
 
 }
 
-beginPrompt();
+beginPrompt(); 
