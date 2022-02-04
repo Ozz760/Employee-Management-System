@@ -9,7 +9,7 @@ const db = mysql.createConnection({
   database: "employee_db",
 });
 
-function beginPrompt() {
+const beginPrompt = () => {
     inquirer
       .prompt({
         type: "list",
