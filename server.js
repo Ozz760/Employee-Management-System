@@ -1,6 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const console = require("console.table");
+const consoleDt = require("console.table");
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -11,48 +11,52 @@ const db = mysql.createConnection({
 
 function beginPrompt() {
     inquirer
-      .prompt([{
+      .prompt({
         type: "list",
         name: "beginPrompt",
         message: "Select an option",
-        choices: ["View All Employees",
+        choices: [
+          "View All Employees",
           "Add Employee",
           'Update Employee Job',
-          'View All Jobs',
-          'Add Job',
-          "View All Departments",
-          'Add Departments'
+          'View all roles',
+          'Add role',
+          "View all Departments",
+          'Add Departments',
+          "Quit"
         ],
-      }, ])
+      })
       .then((answers) => {
         switch (answers.beginPrompt) {
           case 'View All Employees':
-            viewEmployees();
-            break
+            viewAllEmployees();
+            break;
           case 'Add Employee':
             addEmployee();
-            break
-          case 'Update Employee Job':
+            break;
+          case 'Update Employee Role':
             updateEmployee();
-            break
-          case 'View All Jobs':
-            viewJobs();
-            break
+            break;
+          case 'View All Roles':
+            viewRoles();
+            break;
           case 'View All Departments':
-            viewDepartments();
-            break
-          case 'Add Job':
-            addJob();
-            break
+            viewAllDepartments();
+            break;
+          case 'Add Role':
+            addRole();
+            break;
           case 'Add Departments':
             addDepartment();
+          case 'Quit':
+            quit(); 
         }
       });
-  }
+  };
   
 
-  const viewDepartments = () => {
-    db.query('SELECT * from department', (err, res) => {
+  const viewAllDepartments = () => {
+    db.query('SELECT * FROM department', (err, res) => {
       if (err) {
         throw err
       } else {
@@ -60,11 +64,11 @@ function beginPrompt() {
       }
       beginPrompt();
     })
-  }
+  };
   
  
-  const viewEmployees = () => {
-    db.query('SELECT first_name, last_name from employee', (err, res) => {
+  const viewAllEmployees = () => {
+    db.query('SELECT first_name, last_name FROM employee', (err, res) => {
       if (err) {
         throw err
       } else {
@@ -72,11 +76,11 @@ function beginPrompt() {
       }
       beginPrompt();
     })
-  }
+  };
   
 
-  const viewJobs = () => {
-    db.query('SELECT title from job', (err, res) => {
+  const viewRoles = () => {
+    db.query('SELECT title FROM role', (err, res) => {
       if (err) {
         throw err
       } else {
@@ -84,7 +88,7 @@ function beginPrompt() {
       }
       beginPrompt();
     })
-  }
+  };
   
 
   const addEmployee = () => {
@@ -101,7 +105,7 @@ function beginPrompt() {
         },
         {
           type: "input",
-          name: "newJobId",
+          name: "newRoleId",
           message: "Enter job ID",
         },
         {
@@ -111,7 +115,7 @@ function beginPrompt() {
         }
       ])
       .then((answers) => {
-        db.query(`INSERT INTO employee(first_name, last_name, job_id, manager_id) values ('${answers.firstName}', '${answers.lastName}', '${answers.newJobId}', '${answers.newManId}')`, (err, res) => {
+        db.query(`INSERT INTO employee(first_name, last_name, role_id, manager_id) values ('${answers.firstName}', '${answers.lastName}', '${answers.newRoleId}', '${answers.newManId}')`, (err, res) => {
           if (err) {
             throw err
           } else {
@@ -120,7 +124,7 @@ function beginPrompt() {
           beginPrompt();
         });
       });
-  }
+  };
   
 
   const addDepartment = () => {
@@ -140,10 +144,10 @@ function beginPrompt() {
           beginPrompt();
         });
       });
-  }
+  };
   
   
-  const addJob = () => {
+  const addRole = () => {
     inquirer
       .prompt([{
           type: "input",
@@ -162,7 +166,7 @@ function beginPrompt() {
         }
       ])
       .then((answers) => {
-        db.query(`INSERT INTO job(title, salary, department_id) values ('${answers.newRole}', '${answers.newSalary}', '${answers.newDepId}')`, (err, res) => {
+        db.query(`INSERT INTO role(title, salary, department_id) values ('${answers.newRole}', '${answers.newSalary}', '${answers.newDepId}')`, (err, res) => {
           if (err) {
             throw err
           } else {
@@ -171,7 +175,7 @@ function beginPrompt() {
           beginPrompt();
         });
       });
-  }
+  };
   
 
   const updateEmployee = () => {
@@ -189,12 +193,12 @@ function beginPrompt() {
           },
           {
             type: "input",
-            name: "newJobId",
+            name: "newRoleId",
             message: "Enter new job ID",
           },
         ])
         .then((answers) => {
-          db.query(`UPDATE employee SET job_id = ${answers.newJobId} WHERE id = ${answers.employeeTarget}`);
+          db.query(`UPDATE employee SET role_id = ${answers.newRoleId} WHERE id = ${answers.employeeTarget}`);
           if (err) {
             throw err
           } else {
@@ -202,6 +206,10 @@ function beginPrompt() {
           beginPrompt();
         });
     })
-  }
+  };
+
+  const quit = () => { 
+    process.exit(); 
+  };
   
   beginPrompt();
